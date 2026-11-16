@@ -2,7 +2,7 @@ export function shelfObject(label, art) {
   const item = document.createElement('button');
   item.type = 'button';
   item.className = 'shelf-object';
-  item.innerHTML = '<svg viewBox="-24 -26 48 52" aria-hidden="true">' + art + '</svg>';
+  item.innerHTML = '<svg viewBox="-24 -26 48 52" width="22" height="22" aria-hidden="true">' + art + '</svg>';
   const name = document.createElement('span');
   name.textContent = label;
   item.append(name);

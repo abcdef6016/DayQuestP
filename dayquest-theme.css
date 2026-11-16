@@ -1,4 +1,4 @@
-:root {
+﻿:root {
   color-scheme: light;
   --page: #f4ecff;
   --page-glow: #edd8fb;
@@ -501,3 +501,67 @@ body > aside > div:first-child { flex: 1; }
 
 #barista-scene.barista-serving .barista-glass { opacity: .22; }
 #barista-scene.barista-customer-target .barista-customer { filter: drop-shadow(0 0 7px #ffcaed); }
+
+.barista-rush-timers { display: flex; flex-wrap: wrap; gap: 6px; margin-block: 5px 4px; }
+#barista-game .barista-rush-timers p {
+  margin: 0; border: 1px solid var(--line); border-radius: 999px; padding: 4px 9px;
+  background: var(--surface-2); color: var(--text-global); font-weight: 760; font-variant-numeric: tabular-nums;
+}
+#barista-game .barista-rush-timers #barista-game-clock { color: var(--pink); border-color: var(--pink); }
+#barista-game-customer { font-weight: 740; }
+
+/* Shell dimensions and contrast also apply when WebView drops a utility declaration. */
+:root {
+  --dq-inset-top: var(--safe-area-inset-top, env(safe-area-inset-top, 0px));
+  --dq-inset-right: var(--safe-area-inset-right, env(safe-area-inset-right, 0px));
+  --dq-inset-bottom: var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px));
+  --dq-inset-left: var(--safe-area-inset-left, env(safe-area-inset-left, 0px));
+}
+html, body { margin: 0; max-width: 100%; overflow-x: clip; }
+.hidden, [hidden] { display: none !important; }
+body button { color: inherit; }
+body :where(button) > svg[aria-hidden=true] { flex-shrink: 0; max-width: 100%; }
+.dayquest-nav-icon { display: block; width: 20px; height: 20px; color: inherit; }
+body :where(.tab-content, [id^=modal-]) :is(.bg-slate-900\/95,.bg-slate-950\/75) {
+  background: var(--surface-2); color: var(--ink);
+}
+#return-portal-card .text-white { color: var(--ink); }
+#tab-quests .space-filter-btn { white-space: normal; overflow-wrap: anywhere; max-width: 100%; }
+#tab-quests .space-filter-btn[aria-pressed=true] { color: var(--pink); border-color: var(--pink); background: var(--surface-2); }
+#dayquest-mobile-nav { display: none; }
+@media (min-width: 768px) {
+  body > aside.hidden { display: flex !important; }
+  .dayquest-mobile-header { display: none !important; }
+  #sfx-toggle-desktop { display: inline-flex !important; }
+}
+@media (max-width: 767px) {
+  body { display: block; min-height: 100vh; min-height: 100dvh; }
+  body > aside { display: none !important; }
+  #dayquest-main {
+    width: 100%; min-width: 0;
+    padding: calc(12px + var(--dq-inset-top)) max(12px,var(--dq-inset-right))
+      calc(67px + var(--dq-inset-bottom)) max(12px,var(--dq-inset-left));
+  }
+  .dayquest-mobile-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 7px 10px; margin-bottom: 12px; gap: 7px;
+  }
+  .dayquest-mobile-header > div { min-width: 0; }
+  #dayquest-mobile-nav {
+    display: grid; grid-template-columns: repeat(6,minmax(0,1fr)); gap: 2px;
+    position: fixed; inset: auto 0 0; z-index: 45; border-top: 1px solid var(--line);
+    padding: 4px max(4px,var(--dq-inset-right)) calc(4px + var(--dq-inset-bottom)) max(4px,var(--dq-inset-left));
+    background: var(--sidebar);
+  }
+  #dayquest-mobile-nav .mobile-nav-btn {
+    display: grid; align-content: center; justify-items: center; gap: 2px;
+    width: 100%; min-width: 0; min-height: 47px; padding: 3px 0;
+    border: 0; border-radius: 9px; background: transparent; color: var(--muted);
+    font: inherit; -webkit-tap-highlight-color: transparent;
+  }
+  #dayquest-mobile-nav .mobile-nav-btn[aria-current=page] { color: var(--pink); background: var(--surface-2); }
+  #dayquest-mobile-nav .mobile-nav-btn span { margin: 0; font-size: .63rem; line-height: 1.15; white-space: nowrap; }
+  #tab-quests .space-filter-btn { min-height: 42px; }
+  #tab-quests > div:first-child > div:first-child { display: flex; flex-wrap: wrap; overflow: visible; max-width: 100%; }
+}
+

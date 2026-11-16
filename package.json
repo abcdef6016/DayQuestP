@@ -3,14 +3,15 @@
   "version": "2.0.0",
   "description": "DayQuest ADHD Task Initiation & Flow Mobile App",
   "scripts": {
-    "serve": "npm run build:mobile && npx serve public",
-    "cap:sync": "npm run build:mobile && npx cap sync",
-    "cap:android": "npm run build:mobile && npx cap sync android && npx cap open android",
-    "cap:ios": "npm run build:mobile && npx cap sync ios && npx cap open ios",
+    "serve": "npm run build && npx serve public",
+    "cap:sync": "npm run build && npx cap sync",
+    "cap:android": "npm run build && npx cap sync android && npm run verify:web -- android/app/src/main/assets/public && npx cap open android",
+    "cap:ios": "npm run build && npx cap sync ios && npx cap open ios",
     "build:mobile": "node build-mobile.mjs",
     "build:styles": "tailwindcss -i tailwind-source.css -o vendor/tailwind.css --minify",
     "build:app": "esbuild app.mjs --bundle --format=iife --target=chrome90,firefox90,safari15 --minify --outfile=vendor/dayquest.js",
-    "build": "npm run build:styles && npm run build:app && npm run build:mobile"
+    "build": "npm run build:styles && npm run build:app && npm run build:mobile",
+    "verify:web": "node verify-web-assets.mjs"
   },
   "dependencies": {
     "@capacitor/android": "^8.0.0",

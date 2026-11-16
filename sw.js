@@ -1,6 +1,6 @@
-const CACHE_NAME = 'dayquest-v2-drinks-and-daily-chores-9';
+const CACHE_NAME = 'dayquest-v2-android-shell-11';
 const ASSETS = [
-  './', './index.html', './manifest.json', './icon.png',
+  './', './index.html', './manifest.json', './icon.png', './icon-192.png', './icon-maskable.png',
   './ramen.css', './cottage.css', './dayquest-theme.css', './vendor/dayquest.js',
   './vendor/tailwind.css', './vendor/confetti.js', './vendor/fredoka-latin.woff2', './vendor/plus-jakarta-sans-latin.woff2'
 ];

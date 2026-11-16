@@ -44,6 +44,8 @@ function isCream(item) {
 function foam(color = '#fff2df') {
   return '<path d="M-49 2q-8-14 12-19q-7-13 13-17q-5-12 13-17q3-15 18-18q-4 11 8 13q20 3 18 15q18 5 16 20q16 5 8 17q-24 18-100 6Z" fill="' + color +
     '" stroke="#d8acaa" stroke-width="2"/><path d="M-37-12q27 15 68 0m-53-17q25 10 50-1m-38-15q14 6 26 1m-6-14q4 3 11 3" fill="none" stroke="#d9b5af" stroke-width="3" stroke-linecap="round"/>' +
+    '<path d="M-45 0q28 18 87 1l-5 6q-35 15-82 1Zm14-19q22 13 61 2q-12 9-33 11q-17-1-28-7Zm10-16q17 9 39-1q-11 10-31 10Z" fill="#b67b89" opacity=".22"/>' +
+    '<path d="M-43-3q8 7 21 7m-14-22q12 5 29 4m-13-20q11 4 22 1m-5-14q5 3 11 1" stroke="#fffdf5" stroke-width="2.6" fill="none" stroke-linecap="round"/>' +
     '<path d="M-40 2q19 5 32 1m-14-22q12 2 22 0" stroke="#fffaf0" stroke-width="4" fill="none" stroke-linecap="round"/>';
 }
 
@@ -108,8 +110,12 @@ export function baristaGlass(dish, clipId) {
   const float = garnish && !layers && (recipe?.method !== 'blend' || dish.turns < 3)
     ? '<g transform="translate(267 ' + (count ? y+4 : 204) + ') rotate(-17) scale(.71)">' +
       ingredientArt(garnish) + '</g>' : '';
+  const chocolate = ingredients.some(item => /chocolate|cocoa/i.test(item));
+  const toppingDrizzle = chocolate
+    ? '<path d="M-38-8q9-7 16 2t16-1t16 1t19-5m-29-21q9 7 19 2" fill="none" stroke="#653640" stroke-width="4" stroke-linecap="round"/>' +
+      '<path d="M-34-9q8-4 11 1m22 2q5-4 10-1" fill="none" stroke="#bb766f" stroke-width="1.1" stroke-linecap="round"/>' : '';
   const top = whipped
-    ? '<g transform="translate(240 ' + (count ? y+2 : 212) + ') scale(.93)">' + foam() + '</g>'
+    ? '<g transform="translate(240 ' + (count ? y+2 : 212) + ') scale(.93)">' + foam() + toppingDrizzle + '</g>'
     : scoops ? '<g transform="translate(238 ' + (count ? y+3 : 214) + ')"><path d="M-35 0q-4-13 8-20q4-24 26-24t27 23q16 10 11 23q-15 15-37 7q-24 7-35-9Z" fill="#fae1ca" stroke="#c4959c" stroke-width="2"/><path d="M-14-30q13-12 26 0" fill="none" stroke="#fff4e5" stroke-width="4" stroke-linecap="round"/></g>' : '';
 
   return '<defs><clipPath id="' + clipId + '"><path d="M185 117h110l-12 102q-1 12-43 12t-43-12Z"/></clipPath>' +

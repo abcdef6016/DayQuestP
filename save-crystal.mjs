@@ -154,6 +154,7 @@ function combineRecords(current, incoming, fresh) {
       points: Math.max(current.game?.points ?? 0, incoming.game?.points ?? 0),
       served: Math.max(current.game?.served ?? 0, incoming.game?.served ?? 0),
       order: record.game?.order ?? null,
+      ...(record.game?.rush ? { rush: record.game.rush } : {}),
       seconds: record.game?.seconds ?? current.game?.seconds ?? 60
     };
   }

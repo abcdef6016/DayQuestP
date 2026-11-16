@@ -2,7 +2,7 @@
 <html lang="en" class="dark">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>DayQuest — Cozy RPG Focus & Flow</title>
   <link rel="stylesheet" href="ramen.css" />
   <link rel="stylesheet" href="cottage.css" />
@@ -21,7 +21,8 @@
   </script>
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <link rel="apple-touch-icon" href="icon.png" />
+  <link rel="apple-touch-icon" href="icon-192.png" />
+  <link rel="icon" type="image/png" href="icon-192.png" />
   
   <link rel="stylesheet" href="vendor/tailwind.css" />
   <link rel="stylesheet" href="dayquest-theme.css" />
@@ -97,7 +98,7 @@
 
   <!-- Service Worker Registration -->
   <script>
-    if (location.protocol !== 'file:' && 'serviceWorker' in navigator) {
+    if (location.protocol !== 'file:' && !window.Capacitor?.isNativePlatform?.() && 'serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('sw.js').catch(() => {});
       });
@@ -109,7 +110,7 @@
     <div>
       <div class="flex items-center gap-3 px-2 py-2 mb-6">
         <div class="dayquest-brand-art w-12 h-12 rounded-2xl flex items-center justify-center">
-          <svg viewBox="0 0 24 24" class="w-6 h-6 text-slate-950 fill-slate-950" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2c.7 5 2 6.4 7 7-5 .7-6.3 2-7 7-.8-5-2-6.3-7-7 5-.6 6.2-2 7-7ZM18.5 12c.4 3 1.5 4 4 4.5-2.5.4-3.6 1.4-4 4.5-.5-3.1-1.5-4.1-4-4.5 2.5-.5 3.5-1.5 4-4.5Z"/></svg>
+          <svg viewBox="0 0 24 24" class="w-6 h-6 text-slate-950 fill-slate-950" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="24" height="24"><path d="M9 2c.7 5 2 6.4 7 7-5 .7-6.3 2-7 7-.8-5-2-6.3-7-7 5-.6 6.2-2 7-7ZM18.5 12c.4 3 1.5 4 4 4.5-2.5.4-3.6 1.4-4 4.5-.5-3.1-1.5-4.1-4-4.5 2.5-.5 3.5-1.5 4-4.5Z"/></svg>
         </div>
         <div>
           <h1 class="dayquest-brand-name font-playful font-bold text-2xl block leading-none">DayQuest</h1>
@@ -119,32 +120,32 @@
 
       <nav class="space-y-2" id="desktop-nav" aria-label="Main navigation">
         <button onclick="switchTab('home')" class="nav-btn btn-juicy w-full flex items-center gap-3 px-4 py-3 rounded-2xl font-bold text-sm transition-all bg-emerald-500/15 text-emerald-300 border-2 border-emerald-500/40" data-tab="home" aria-current="page">
-          <svg class="dayquest-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10 12 3l9 7M5 9v11h14V9m-9 11v-6h4v6"/></svg> Morning Cottage
+          <svg class="dayquest-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="20" height="20"><path d="M3 10 12 3l9 7M5 9v11h14V9m-9 11v-6h4v6"/></svg> Morning Cottage
         </button>
         <button onclick="switchTab('focus')" class="nav-btn btn-juicy w-full flex items-center gap-3 px-4 py-3 rounded-2xl font-bold text-sm transition-all text-slate-400 hover:text-slate-100 hover:bg-slate-800/70 border-2 border-transparent" data-tab="focus">
-          <svg class="dayquest-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2 5 13h7l-1 9 8-12h-7z"/></svg> Focus Arena
+          <svg class="dayquest-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="20" height="20"><path d="M13 2 5 13h7l-1 9 8-12h-7z"/></svg> Focus Arena
         </button>
         <button onclick="switchTab('quests')" class="nav-btn btn-juicy w-full flex items-center gap-3 px-4 py-3 rounded-2xl font-bold text-sm transition-all text-slate-400 hover:text-slate-100 hover:bg-slate-800/70 border-2 border-transparent" data-tab="quests">
-          <svg class="dayquest-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4h10a2 2 0 0 1 2 2v14H7a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Zm2 5h6m-6 4h6m-6 4h3"/></svg> Quest Board
+          <svg class="dayquest-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="20" height="20"><path d="M7 4h10a2 2 0 0 1 2 2v14H7a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Zm2 5h6m-6 4h6m-6 4h3"/></svg> Quest Board
         </button>
-        <button type="button" onclick="switchTab('notebook')" class="nav-btn btn-juicy w-full flex items-center gap-3 px-4 py-3 rounded-2xl font-bold text-sm transition-all text-slate-400 border-2 border-transparent" data-tab="notebook"><svg class="dayquest-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 4h13v16H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Zm3 0v16m3-10h4m-4 4h4"/></svg> Notes</button>
+        <button type="button" onclick="switchTab('notebook')" class="nav-btn btn-juicy w-full flex items-center gap-3 px-4 py-3 rounded-2xl font-bold text-sm transition-all text-slate-400 border-2 border-transparent" data-tab="notebook"><svg class="dayquest-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="20" height="20"><path d="M6 4h13v16H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Zm3 0v16m3-10h4m-4 4h4"/></svg> Notes</button>
         <button onclick="switchTab('rewards')" class="nav-btn btn-juicy w-full flex items-center gap-3 px-4 py-3 rounded-2xl font-bold text-sm transition-all text-slate-400 hover:text-slate-100 hover:bg-slate-800/70 border-2 border-transparent" data-tab="rewards">
-          <svg class="dayquest-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10h16v10H4zm-1-4h18v4H3zm9 0v14m0-14C9 2 5 2 6 5c1 2 4 1 6 1Zm0 0c3-4 7-4 6-1-1 2-4 1-6 1Z"/></svg> Loot & Treats
+          <svg class="dayquest-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="20" height="20"><path d="M4 10h16v10H4zm-1-4h18v4H3zm9 0v14m0-14C9 2 5 2 6 5c1 2 4 1 6 1Zm0 0c3-4 7-4 6-1-1 2-4 1-6 1Z"/></svg> Loot & Treats
         </button>
         <button onclick="switchTab('ramen')" class="nav-btn btn-juicy w-full flex items-center gap-3 px-4 py-3 rounded-2xl font-bold text-sm transition-all text-slate-400 hover:text-slate-100 hover:bg-slate-800/70 border-2 border-transparent" data-tab="ramen">
-          <svg class="dayquest-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12h18q-2 8-9 8t-9-8Zm5-2c-2-3 2-4 0-7m4 7c-2-3 2-4 0-7m4 7c-2-3 2-4 0-7"/></svg> Food Village
+          <svg class="dayquest-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="20" height="20"><path d="M3 12h18q-2 8-9 8t-9-8Zm5-2c-2-3 2-4 0-7m4 7c-2-3 2-4 0-7m4 7c-2-3 2-4 0-7"/></svg> Food Village
         </button>
-        <button type="button" onclick="switchTab('barista')" class="nav-btn btn-juicy w-full flex items-center gap-3 px-4 py-3 rounded-2xl font-bold text-sm transition-all text-slate-400 border-2 border-transparent" data-tab="barista"><svg class="dayquest-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h13v8a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4Zm13 2h2a2 2 0 0 1 0 4h-2M7 5c-1-1 1-2 0-3m6 3c-1-1 1-2 0-3"/></svg> Barista</button>
+        <button type="button" onclick="switchTab('barista')" class="nav-btn btn-juicy w-full flex items-center gap-3 px-4 py-3 rounded-2xl font-bold text-sm transition-all text-slate-400 border-2 border-transparent" data-tab="barista"><svg class="dayquest-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="20" height="20"><path d="M4 8h13v8a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4Zm13 2h2a2 2 0 0 1 0 4h-2M7 5c-1-1 1-2 0-3m6 3c-1-1 1-2 0-3"/></svg> Barista</button>
         <button onclick="switchTab('workshop')" class="nav-btn btn-juicy w-full flex items-center gap-3 px-4 py-3 rounded-2xl font-bold text-sm transition-all text-slate-400 hover:text-slate-100 hover:bg-slate-800/70 border-2 border-transparent" data-tab="workshop">
-          <svg class="dayquest-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v3m-2-4h4M6 8h12q2 0 2 2v8q0 2-2 2H6q-2 0-2-2v-8q0-2 2-2Zm2 5h.01m8 0h.01m-7 3q3 2 6 0"/></svg> SparkBot Lab
+          <svg class="dayquest-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="20" height="20"><path d="M12 4v3m-2-4h4M6 8h12q2 0 2 2v8q0 2-2 2H6q-2 0-2-2v-8q0-2 2-2Zm2 5h.01m8 0h.01m-7 3q3 2 6 0"/></svg> SparkBot Lab
         </button>
         <button onclick="switchTab('insights')" class="nav-btn btn-juicy w-full flex items-center gap-3 px-4 py-3 rounded-2xl font-bold text-sm transition-all text-slate-400 hover:text-slate-100 hover:bg-slate-800/70 border-2 border-transparent" data-tab="insights">
-          <svg class="dayquest-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2 21 9l-3 9-6 4-6-4-3-9Zm9 7H3m9-7 4 7-4 13-4-13Z"/></svg> Save Crystal
+          <svg class="dayquest-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="20" height="20"><path d="M12 2 21 9l-3 9-6 4-6-4-3-9Zm9 7H3m9-7 4 7-4 13-4-13Z"/></svg> Save Crystal
         </button>
       </nav>
     </div>
 
-    <button type="button" class="dayquest-theme-button" onclick="toggleAppearance()" data-theme-button aria-label="Switch theme"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 15a8 8 0 0 1-11-11 8 8 0 1 0 11 11Z"/><path d="M17 4v4m-2-2h4"/></svg><span data-theme-label>Switch theme</span></button>
+    <button type="button" class="dayquest-theme-button" onclick="toggleAppearance()" data-theme-button aria-label="Switch theme"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="20" height="20"><path d="M20 15a8 8 0 0 1-11-11 8 8 0 1 0 11 11Z"/><path d="M17 4v4m-2-2h4"/></svg><span data-theme-label>Switch theme</span></button>
 
     <!-- Player Card Widget -->
     <div class="dayquest-player bg-slate-950/90 border-2 border-slate-800 rounded-3xl p-4 space-y-3 shadow-xl">
@@ -169,19 +170,19 @@
   <!-- MOBILE BOTTOM NAVIGATION -->
   <nav id="dayquest-mobile-nav" aria-label="Main navigation" class="md:hidden fixed bottom-0 left-0 right-0 bg-slate-900/95 backdrop-blur-lg border-t-2 border-slate-800 z-50 flex justify-around py-2 px-1">
     <button onclick="switchTab('home')" class="mobile-nav-btn flex flex-col items-center p-1.5 rounded-2xl text-emerald-400 bg-emerald-500/10" data-tab="home" aria-current="page">
-      <svg class="dayquest-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10 12 3l9 7M5 9v11h14V9m-9 11v-6h4v6"/></svg><span class="text-[10px] mt-0.5 font-bold">Cottage</span>
+      <svg class="dayquest-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="20" height="20"><path d="M3 10 12 3l9 7M5 9v11h14V9m-9 11v-6h4v6"/></svg><span class="text-[10px] mt-0.5 font-bold">Cottage</span>
     </button>
     <button onclick="switchTab('focus')" class="mobile-nav-btn flex flex-col items-center p-1.5 rounded-2xl text-slate-400" data-tab="focus">
-      <svg class="dayquest-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2 5 13h7l-1 9 8-12h-7z"/></svg><span class="text-[10px] mt-0.5 font-bold">Focus</span>
+      <svg class="dayquest-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="20" height="20"><path d="M13 2 5 13h7l-1 9 8-12h-7z"/></svg><span class="text-[10px] mt-0.5 font-bold">Focus</span>
     </button>
     <button onclick="switchTab('quests')" class="mobile-nav-btn flex flex-col items-center p-1.5 rounded-2xl text-slate-400" data-tab="quests">
-      <svg class="dayquest-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4h10a2 2 0 0 1 2 2v14H7a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Zm2 5h6m-6 4h6m-6 4h3"/></svg><span class="text-[10px] mt-0.5 font-bold">Quests</span>
+      <svg class="dayquest-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="20" height="20"><path d="M7 4h10a2 2 0 0 1 2 2v14H7a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Zm2 5h6m-6 4h6m-6 4h3"/></svg><span class="text-[10px] mt-0.5 font-bold">Quests</span>
     </button>
     <button onclick="switchTab('ramen')" class="mobile-nav-btn flex flex-col items-center p-1.5 rounded-2xl text-slate-400" data-tab="ramen">
-      <svg class="dayquest-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12h18q-2 8-9 8t-9-8Zm5-2c-2-3 2-4 0-7m4 7c-2-3 2-4 0-7m4 7c-2-3 2-4 0-7"/></svg><span class="text-[10px] mt-0.5 font-bold">Food</span>
+      <svg class="dayquest-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="20" height="20"><path d="M3 12h18q-2 8-9 8t-9-8Zm5-2c-2-3 2-4 0-7m4 7c-2-3 2-4 0-7m4 7c-2-3 2-4 0-7"/></svg><span class="text-[10px] mt-0.5 font-bold">Food</span>
     </button>
-    <button type="button" onclick="switchTab('barista')" class="mobile-nav-btn flex flex-col items-center p-1.5 rounded-2xl text-slate-400" data-tab="barista"><svg class="dayquest-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h13v8a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4Zm13 2h2a2 2 0 0 1 0 4h-2M7 5c-1-1 1-2 0-3m6 3c-1-1 1-2 0-3"/></svg><span class="text-[10px] mt-0.5 font-bold">Barista</span></button>
-    <button type="button" onclick="switchTab('notebook')" class="mobile-nav-btn flex flex-col items-center p-1.5 rounded-2xl text-slate-400" data-tab="notebook"><svg class="dayquest-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 4h13v16H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Zm3 0v16m3-10h4m-4 4h4"/></svg><span class="text-[10px] mt-0.5 font-bold">Notes</span></button>
+    <button type="button" onclick="switchTab('barista')" class="mobile-nav-btn flex flex-col items-center p-1.5 rounded-2xl text-slate-400" data-tab="barista"><svg class="dayquest-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="20" height="20"><path d="M4 8h13v8a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4Zm13 2h2a2 2 0 0 1 0 4h-2M7 5c-1-1 1-2 0-3m6 3c-1-1 1-2 0-3"/></svg><span class="text-[10px] mt-0.5 font-bold">Barista</span></button>
+    <button type="button" onclick="switchTab('notebook')" class="mobile-nav-btn flex flex-col items-center p-1.5 rounded-2xl text-slate-400" data-tab="notebook"><svg class="dayquest-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="20" height="20"><path d="M6 4h13v16H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Zm3 0v16m3-10h4m-4 4h4"/></svg><span class="text-[10px] mt-0.5 font-bold">Notes</span></button>
   </nav>
 
   <!-- MAIN CONTENT AREA -->
@@ -191,7 +192,7 @@
     <header class="dayquest-mobile-header flex md:hidden items-center justify-between mb-5 bg-slate-900/90 border-2 border-slate-800 rounded-2xl px-4 py-2.5 shadow-lg">
       <div class="flex items-center gap-2.5">
         <div class="dayquest-brand-art w-9 h-9 rounded-xl flex items-center justify-center">
-          <svg viewBox="0 0 24 24" class="w-5 h-5 text-slate-950 fill-slate-950" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2c.7 5 2 6.4 7 7-5 .7-6.3 2-7 7-.8-5-2-6.3-7-7 5-.6 6.2-2 7-7ZM18.5 12c.4 3 1.5 4 4 4.5-2.5.4-3.6 1.4-4 4.5-.5-3.1-1.5-4.1-4-4.5 2.5-.5 3.5-1.5 4-4.5Z"/></svg>
+          <svg viewBox="0 0 24 24" class="w-5 h-5 text-slate-950 fill-slate-950" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><path d="M9 2c.7 5 2 6.4 7 7-5 .7-6.3 2-7 7-.8-5-2-6.3-7-7 5-.6 6.2-2 7-7ZM18.5 12c.4 3 1.5 4 4 4.5-2.5.4-3.6 1.4-4 4.5-.5-3.1-1.5-4.1-4-4.5 2.5-.5 3.5-1.5 4-4.5Z"/></svg>
         </div>
         <div>
           <span class="dayquest-brand-name font-playful font-bold text-lg block leading-none">DayQuest</span>
@@ -199,7 +200,7 @@
         </div>
       </div>
       <div class="flex items-center gap-2">
-        <button type="button" class="dayquest-theme-button" onclick="toggleAppearance()" data-theme-button aria-label="Switch theme"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 15a8 8 0 0 1-11-11 8 8 0 1 0 11 11Z"/><path d="M17 4v4m-2-2h4"/></svg></button>
+        <button type="button" class="dayquest-theme-button" onclick="toggleAppearance()" data-theme-button aria-label="Switch theme"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="20" height="20"><path d="M20 15a8 8 0 0 1-11-11 8 8 0 1 0 11 11Z"/><path d="M17 4v4m-2-2h4"/></svg></button>
         <div class="flex items-center gap-1.5 bg-amber-500/15 border-2 border-amber-500/30 px-3 py-1 rounded-xl text-amber-300 text-xs font-extrabold">
           <span>🪙</span> <span id="mobile-user-coins">120</span>
         </div>
@@ -238,7 +239,7 @@
         <form onsubmit="handleQuickCapture(event)" class="flex gap-2.5">
           <input type="text" id="quick-input" placeholder="Task to remember" aria-label="Quick task" class="flex-1 bg-slate-950 border-2 border-slate-800 rounded-2xl px-4 py-3 text-sm font-medium text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-400 transition-all" />
           <button type="submit" class="btn-juicy shadow-juicy-emerald bg-emerald-400 hover:bg-emerald-300 text-slate-950 font-extrabold px-5 py-3 rounded-2xl text-sm transition-all flex items-center gap-1.5 shrink-0">
-            <svg viewBox="0 0 24 24" class="w-4 h-4 stroke-[3]" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg> Add task
+            <svg viewBox="0 0 24 24" class="w-4 h-4 stroke-[3]" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M12 5v14M5 12h14"/></svg> Add task
           </button>
         </form>
         <p id="quick-status" role="status"></p>
@@ -270,7 +271,7 @@
       <!-- Interactive SparkBot Companion Card -->
       <div class="bg-gradient-to-r from-indigo-950/80 via-slate-900 to-emerald-950/60 border-2 border-indigo-500/30 rounded-3xl p-4 md:p-5 shadow-xl flex items-center gap-4">
         <button onclick="petSparkBot()" id="companion-avatar" class="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-slate-950 border-2 border-emerald-400/50 flex items-center justify-center shrink-0 shadow-lg animate-float cursor-pointer hover:scale-105 transition-transform" title="Tap me for encouragement!">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" class="w-14 h-14">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" class="w-14 h-14" width="56" height="56">
             <line x1="100" y1="30" x2="100" y2="58" stroke="#f59e0b" stroke-width="8" stroke-linecap="round"/>
             <circle cx="100" cy="22" r="12" fill="#f59e0b"/>
             <rect x="50" y="58" width="100" height="78" rx="22" fill="#334155" stroke="#94a3b8" stroke-width="5"/>
@@ -496,7 +497,7 @@
         
         <!-- Interactive SparkBot Display -->
         <div onclick="petSparkBot()" class="w-52 h-52 mx-auto bg-slate-950 rounded-3xl border-2 border-emerald-500/30 flex items-center justify-center shadow-[0_0_35px_rgba(16,185,129,0.15)] mb-6 relative cursor-pointer hover:scale-105 transition-transform animate-float">
-          <svg id="sparkbot-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" class="w-40 h-40">
+          <svg id="sparkbot-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" class="w-40 h-40" width="160" height="160">
             <line x1="100" y1="32" x2="100" y2="60" stroke="#f59e0b" stroke-width="7" stroke-linecap="round"/>
             <circle cx="100" cy="24" r="11" fill="#f59e0b" id="bot-antenna-light"/>
             <rect x="52" y="60" width="96" height="72" rx="20" fill="#334155" stroke="#94a3b8" stroke-width="5"/>
@@ -1240,7 +1241,7 @@
               ⚡ Play
             </button>
             <button onclick="deleteQuest(${q.id})" aria-label="Delete quest" class="text-slate-500 hover:text-rose-400 p-2 rounded-xl">
-              <svg viewBox="0 0 24 24" class="w-4 h-4" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16m-10 4v6m4-6v6M9 7V4h6v3m3 0-1 13H7L6 7"/></svg>
+              <svg viewBox="0 0 24 24" class="w-4 h-4" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M4 7h16m-10 4v6m4-6v6M9 7V4h6v3m3 0-1 13H7L6 7"/></svg>
             </button>
           </div>
         </div>

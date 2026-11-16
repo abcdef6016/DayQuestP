@@ -260,7 +260,7 @@ function add(label, action, { value, target, icon, disabled = false, pressed } =
   button.dataset.action = action;
   if (value) button.dataset.value = value;
   if (target) button.dataset.target = target;
-  if (icon) button.innerHTML = '<svg viewBox="-19 -19 38 38" aria-hidden="true">' + icon + '</svg>';
+  if (icon) button.innerHTML = '<svg viewBox="-19 -19 38 38" width="22" height="22" aria-hidden="true">' + icon + '</svg>';
   if (pressed !== undefined) button.setAttribute('aria-pressed', pressed);
   button.append(label);
   button.disabled = disabled;

@@ -1,4 +1,4 @@
-import { customers, freshOrders, newOrder, scoreOrder } from './barista-orders.mjs';
+import { customers, freshOrders, startRush, advanceRush, stopRush, scoreOrder, rushSeconds, customerSeconds } from './barista-orders.mjs';
 import { shelfObject, counterProps } from './ingredient-shelf.mjs';
 import { drinks } from './barista-recipes.mjs';
 import { baristaAction, drinkById, drinkPhase, freshBarista, availableIngredients, mixTurns, mixLabels } from './barista-model.mjs';
@@ -17,15 +17,17 @@ root.innerHTML = `
     </nav>
   </header>
   <details id="barista-game">
-    <summary>Timed orders</summary>
+    <summary>60-second cafe rush</summary>
     <div class="barista-game-controls">
-      <label for="barista-game-time">Order time</label>
-      <select id="barista-game-time"><option value="30">30 seconds</option><option value="60" selected>60 seconds</option><option value="90">90 seconds</option></select>
-      <button type="button" id="barista-game-start">Start timed order</button>
+      <button type="button" id="barista-game-start">Start cafe rush</button>
+      <button type="button" id="barista-game-stop" hidden>End rush</button>
     </div>
     <p id="barista-game-score"></p>
+    <div class="barista-rush-timers">
+      <p id="barista-rush-clock" role="timer" aria-live="off" hidden></p>
+      <p id="barista-game-clock" role="timer" aria-live="off" hidden></p>
+    </div>
     <p id="barista-game-customer" hidden></p>
-    <p id="barista-game-clock" role="timer" aria-live="off" hidden></p>
     <p id="barista-game-result" role="status"></p>
   </details>
   <section id="barista-menu">
@@ -87,6 +89,7 @@ let chosenSave;
 let mixing;
 let effectTimer;
 let orderTicker;
+let advancing = false;
 const sorted = [...drinks].sort((a,b) => Number(b.source === 'original') - Number(a.source === 'original') || a.name.localeCompare(b.name));
 const instructions = {
   stir: 'Circle inside the glass to stir.',
@@ -140,23 +143,21 @@ function write(change, after) {
     get('counter-button').hidden = !record.dish.recipeId;
     after?.();
   }).catch(() => { get('status').textContent = 'That change could not be saved. Try again.'; });
+  return queue;
 }
 
 function start(id, timed = false) {
   if (!record) return;
   const { dish } = record;
   const saved = record.recipes.some(recipe => JSON.stringify(recipe.dish) === JSON.stringify(dish) && recipe.name === record.name);
-  if (dish.added.length && !saved && !window.confirm('Replace the current drink?')) return;
+  const activeRush = record.game?.rush && !record.game.rush.ended;
+  if (activeRush ? !window.confirm('End the current rush and replace the drink?')
+    : dish.added.length && !saved && !window.confirm('Replace the current drink?')) return;
   write(previous => {
-    const game = previous.game ?? freshOrders();
-    let order = null;
-    const seconds = timed ? Number(get('game-time').value) : game.seconds ?? 60;
-    if (timed) {
-      order = newOrder(seconds);
-      if (!game.served) order.customer = 'rowan';
-    }
-    return { ...previous, dish: baristaAction(previous.dish,'choose',order?.recipeId ?? id),
-      name:'', history:[], game: { ...game, order, seconds } };
+    const existing = previous.game ?? freshOrders();
+    const game = timed ? startRush(existing) : { ...existing, order: null, rush: undefined };
+    return { ...previous, dish: baristaAction(previous.dish,'choose',game.order?.recipeId ?? id),
+      name:'', history:[], game };
   }, () => {
     get('status').textContent = '';
     viewPage('counter');
@@ -165,7 +166,12 @@ function start(id, timed = false) {
 
 function act(action, value) {
   let applied = false;
+  const expected = record?.game?.order;
   write(previous => {
+    const actual = previous.game?.order;
+    if (expected?.deadline !== actual?.deadline || expected?.customer !== actual?.customer) return previous;
+    if (action === 'serve' && previous.game?.rush && !previous.game.rush.ended &&
+        actual && !actual.result && Date.now() >= actual.deadline) return previous;
     const dish = baristaAction(previous.dish, action, value);
     if (dish === previous.dish) return previous;
     applied = true;
@@ -245,31 +251,54 @@ function counter() {
 
 function renderOrders() {
   const game = record?.game ?? freshOrders();
-  const order = game.order;
+  const { order, rush } = game;
+  const now = Date.now();
+  const active = rush && !rush.ended;
   const clock = get('game-clock');
+  const session = get('rush-clock');
   const customer = get('game-customer');
-  const startButton = get('game-start');
-  startButton.disabled = !record;
-  startButton.textContent = order && !order.result && order.deadline > Date.now() ? 'Start another order' : 'Start timed order';
-  const score = 'Barista points ' + game.points + ' ? Orders served on time ' + game.served;
+  get('game-start').disabled = !record || Boolean(active);
+  get('game-stop').hidden = !active;
+  const score = 'Barista points ' + game.points + ' | Lifetime on-time orders ' + game.served;
   if (get('game-score').textContent !== score) get('game-score').textContent = score;
+  session.hidden = !active;
+  clock.hidden = !active || !order || Boolean(order.result);
   customer.hidden = !order;
-  clock.hidden = !order || Boolean(order.result);
   if (!order) { get('game-result').textContent = ''; return; }
   const label = customers[order.customer].name + ' ordered ' + drinkById[order.recipeId].name + '.';
   if (customer.textContent !== label) customer.textContent = label;
-  const remaining = Math.max(0, Math.ceil((order.deadline - Date.now())/1000));
-  const timing = remaining ? remaining + ' seconds left' : 'Time is up. You can finish this drink at your own pace.';
-  const result = order.result === 'served' ? '+' + order.earned + ' points for serving on time.' :
-    order.result === 'expired' ? 'Drink served after time ran out.' : '';
-  if (clock.textContent !== timing) clock.textContent = timing;
+  const showSeconds = deadline => Math.max(0, Math.ceil((deadline - now)/1000));
+  if (active) {
+    const sessionText = 'Cafe rush: ' + showSeconds(rush.deadline) + ' / ' + rushSeconds + 's';
+    const customerText = customers[order.customer].name + ': ' + showSeconds(order.deadline) + ' / ' + customerSeconds + 's';
+    if (session.textContent !== sessionText) session.textContent = sessionText;
+    if (clock.textContent !== customerText) clock.textContent = customerText;
+  }
+  const result = rush?.ended ? 'Rush finished. ' + rush.served + ' served, ' + rush.missed + ' missed, +' + rush.points + ' points.'
+    : order.result === 'served' ? '+' + order.earned + ' points. Next customer coming.' : '';
   if (get('game-result').textContent !== result) get('game-result').textContent = result;
 }
 
-get('game-start').addEventListener('click', () => {
-  get('game-result').textContent = '';
-  start(null, true);
-});
+function tickRush() {
+  renderOrders();
+  const game = record?.game;
+  const now = Date.now();
+  if (!game?.rush || game.rush.ended || advancing) return;
+  const order = game.order;
+  const due = now >= game.rush.deadline || (!order.result && now >= order.deadline) ||
+    (order.result && now >= order.nextAt);
+  if (!due) return;
+  advancing = true;
+  write(previous => {
+    const game = advanceRush(previous.game, Date.now());
+    if (game === previous.game) return previous;
+    if (game.rush.ended) return { ...previous, game };
+    return { ...previous, game, dish: baristaAction(previous.dish,'choose',game.order.recipeId), history:[], name:'' };
+  })?.finally(() => { advancing = false; });
+}
+
+get('game-start').addEventListener('click', () => start(null, true));
+get('game-stop').addEventListener('click', () => write(previous => ({ ...previous, game: stopRush(previous.game) })));
 
 function showSaved(id) {
   chosenSave = id;
@@ -411,9 +440,8 @@ async function load() {
     menu();
     counter();
     renderOrders();
-    if (record.game?.order) get('game').open = true;
-    get('game-time').value = String(record.game?.seconds ?? 60);
-    if (!orderTicker) orderTicker = setInterval(renderOrders, 250);
+    if (record.game?.rush) get('game').open = true;
+    if (!orderTicker) orderTicker = setInterval(tickRush, 200);
     if (view === 'saved') showSaved(chosenSave);
     else viewPage(record.dish.recipeId ? 'counter' : 'menu');
   } catch {
