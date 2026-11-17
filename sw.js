@@ -1,4 +1,4 @@
-const CACHE_NAME = 'dayquest-v2-android-shell-11';
+const CACHE_NAME = 'dayquest-v2-quick-rush-13';
 const ASSETS = [
   './', './index.html', './manifest.json', './icon.png', './icon-192.png', './icon-maskable.png',
   './ramen.css', './cottage.css', './dayquest-theme.css', './vendor/dayquest.js',

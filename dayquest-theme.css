@@ -1,4 +1,4 @@
-﻿:root {
+:root {
   color-scheme: light;
   --page: #f4ecff;
   --page-glow: #edd8fb;
@@ -565,3 +565,34 @@ body :where(.tab-content, [id^=modal-]) :is(.bg-slate-900\/95,.bg-slate-950\/75)
   #tab-quests > div:first-child > div:first-child { display: flex; flex-wrap: wrap; overflow: visible; max-width: 100%; }
 }
 
+
+.cottage-reminders { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--line); }
+.cottage-reminders h4 { font-weight: 750; }
+.cottage-reminders form { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 5px; }
+.cottage-reminders input[type=time], .cottage-reminders button {
+  min-height: 42px; border: 1px solid var(--line); border-radius: 9px;
+  padding: 6px 9px; color: var(--ink); background: var(--surface-2);
+}
+.cottage-reminders input[type=time] { width: auto; height: auto; }
+.cottage-reminders button { font-weight: 750; cursor: pointer; }
+.cottage-reminders p { font-size: .83rem; color: var(--muted); margin-top: 4px; }
+
+.focus-extra, .quick-shelf { display: flex; align-items: center; flex-wrap: wrap; gap: .5rem; }
+#custom-focus { justify-content: center; }
+#focus-volume { width: min(7rem, 35vw); accent-color: var(--accent); }
+.focus-extra select, .focus-extra input[type=number], .focus-extra button, .dayquest-quick-panel button {
+  border: 1px solid var(--line); border-radius: .7rem; background: var(--surface); color: var(--text);
+  padding: .5rem .65rem; min-height: 44px;
+}
+.focus-extra input[type=number] { width: 5rem; }
+.focus-extra button, .dayquest-quick-panel button { cursor: pointer; font-weight: 700; }
+.dayquest-quick-panel button:disabled { opacity: .55; cursor: default; }
+.dayquest-quick-panel { padding: .85rem; margin-top: .75rem; color: var(--text); border: 1px solid var(--line); border-radius: 1rem; background: var(--surface); }
+.dayquest-quick-panel summary { font-weight: 800; cursor: pointer; }
+.dayquest-quick-panel p, .quick-shelf { margin: .55rem 0; }
+.quick-plate { display: grid; place-items: center; min-height: 3.5rem; text-align: center; padding: .45rem; border: 2px dashed var(--line); border-radius: 1.5rem; }
+.quick-drop, .quick-shelf button[aria-pressed=true] { background: var(--accent-wash, #8461bb55); border-color: var(--accent); }
+.quick-shelf button { touch-action: none; }
+.daily-online-recipe { margin-top: .75rem; }
+.daily-online-recipe a { text-decoration: underline; }
+.daily-online-recipe small { display: block; }

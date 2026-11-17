@@ -33,16 +33,18 @@ export const customerSeconds = 20;
 const rushDrinks = orderDrinks.filter(drink => drink.ingredients.length <= 4);
 
 function rushOrder(rush, now, previous, random) {
-  const choices = rushDrinks.filter(drink => drink.id !== previous?.recipeId);
+  const easy = rushDrinks.filter(drink => drink.ingredients.length === 3);
+  const pool = rush.duration === 30 && easy.length > 1 ? easy : rushDrinks;
+  const choices = pool.filter(drink => drink.id !== previous?.recipeId);
   const recipe = choices[Math.floor(random() * choices.length)];
   const ids = Object.keys(customers);
   return { recipeId: recipe.id, customer: ids[(rush.number - 1) % ids.length],
     deadline: Math.min(now + customerSeconds * 1000, rush.deadline), result: null, earned: 0 };
 }
 
-export function startRush(game, now = Date.now(), random = Math.random) {
-  const rush = { deadline: now + rushSeconds * 1000, number: 1, served: 0, missed: 0, points: 0, ended: false };
-  return { ...game, rush, order: rushOrder(rush, now, null, random), seconds: rushSeconds };
+export function startRush(game, now = Date.now(), random = Math.random, duration = rushSeconds) {
+  const rush = { duration, deadline: now + duration * 1000, number: 1, served: 0, missed: 0, points: 0, ended: false };
+  return { ...game, rush, order: rushOrder(rush, now, null, random), seconds: duration };
 }
 
 export function advanceRush(game, now = Date.now(), random = Math.random) {
@@ -71,7 +73,7 @@ export function validOrders(game) {
       !Number.isSafeInteger(game.served) || game.served < 0) return false;
   const order = game.order;
   const rush = game.rush;
-  if (rush && (!order || ![rush.deadline,rush.number,rush.served,rush.missed,rush.points].every(value =>
+  if (rush && (!order || (rush.duration !== undefined && ![30,60].includes(rush.duration)) || ![rush.deadline,rush.number,rush.served,rush.missed,rush.points].every(value =>
     Number.isSafeInteger(value) && value >= 0) || rush.number < 1 || typeof rush.ended !== 'boolean' ||
     order.deadline > rush.deadline || (order.result === 'served' && !Number.isSafeInteger(order.nextAt)))) return false;
   return order === null || Boolean(order && orderDrinks.some(drink => drink.id === order.recipeId) &&

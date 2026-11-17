@@ -132,7 +132,7 @@ function refresh(now = new Date()) {
     preferences.revealed = daily.day;
     savePreferences();
     refresh();
-  });
+  }, daily.day);
 
   const idle = isIdle();
   if (idle) discover(daily.companion);

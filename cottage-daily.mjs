@@ -2,7 +2,9 @@ export const companions = {
   pip: { name: 'Pip', kind: 'moss rabbit', coat: '#f5dfb5', accent: '#ad7578', scarf: '#709083' },
   mallow: { name: 'Mallow', kind: 'orchard cat', coat: '#df9a76', accent: '#b76a72', scarf: '#78919b' },
   bramble: { name: 'Bramble', kind: 'fern bear', coat: '#bf9e8d', accent: '#b67d78', scarf: '#a8a66e' },
-  clover: { name: 'Clover', kind: 'garden frog', coat: '#a2be87', accent: '#be8a78', scarf: '#bb8297' }
+  clover: { name: 'Clover', kind: 'garden frog', coat: '#a2be87', accent: '#be8a78', scarf: '#bb8297' },
+  pingu: { name: 'Pingu', kind: 'penguin', coat: '#4a4978', accent: '#efacb2', scarf: '#b782bc' },
+  giraffe: { name: 'Giraffe', kind: 'giraffe', coat: '#edbb78', accent: '#e89b91', scarf: '#867bb2' }
 };
 
 const greetings = [
@@ -70,7 +72,7 @@ export function dailyContent(seed, date) {
   const companion = pick(ids);
   const greeting = pick(greetings);
   const food = dailyRecipe(seed, date);
-  const visitor = pick(ids.filter(id => id !== companion));
+  const visitor = pick(['pingu','giraffe'].filter(id => id !== companion));
   const mayVisit = random() < 0.65;
   const minute = 8 * 60 + Math.floor(random() * 10 * 60);
   return { day, companion, greeting, food, visitor: mayVisit ? visitor : null, minute };

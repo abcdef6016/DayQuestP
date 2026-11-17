@@ -2,6 +2,27 @@ import { companions } from './cottage-daily.mjs';
 
 export function companionArt(id) {
   const { coat, accent, scarf, kind } = companions[id];
+  if (kind === 'penguin') {
+    return '<g stroke="#564465" stroke-width="2.4" stroke-linejoin="round">' +
+      '<ellipse cx="-14" cy="43" rx="10" ry="5" fill="#f4ab69"/><ellipse cx="14" cy="43" rx="10" ry="5" fill="#f4ab69"/>' +
+      '<path d="M-21 9q-19 10-16 27q6 8 18-10m39-17q19 10 17 27q-7 8-19-10" fill="' + coat + '"/>' +
+      '<ellipse cy="8" rx="30" ry="37" fill="' + coat + '"/><path d="M0-12q-18-17-23 5q-7 29 7 42q16 12 32 0q14-13 7-42q-5-22-23-5Z" fill="#fff0e1" stroke="none"/>' +
+      '<path d="M-10-2v2m20-2v2" stroke="#523b61" stroke-width="3" stroke-linecap="round"/><path d="M-6 7q6-6 12 0l-6 5Z" fill="#f3ab70"/>' +
+      '<path d="M-26 20q27 12 51-1l2 6q-21 15-53 2Z" fill="' + scarf + '"/>' +
+      '<g fill="' + accent + '" stroke="none"><ellipse cx="-16" cy="10" rx="5" ry="3"/><ellipse cx="16" cy="10" rx="5" ry="3"/></g></g>';
+  }
+  if (kind === 'giraffe') {
+    return '<g stroke="#8a604f" stroke-width="2.4" stroke-linejoin="round">' +
+      '<path d="M-29 42q4-16 23-17l-5-26h22l7 35q11 2 14 9q-27 15-61-1Z" fill="' + coat + '"/>' +
+      '<path d="M-4 15l8-1 5 7-7 4Zm-15 24 9-5 7 8-8 5Zm25-4 7-3 6 8-8 4Z" fill="#bd805b" stroke="none"/>' +
+      '<path d="M-16-26q-16-14-24-6q-4 9 20 15m32-11q15-14 23-6q4 9-19 15" fill="' + coat + '"/>' +
+      '<path d="M-12-31l-3-13m24 13 3-13" fill="none" stroke-width="5" stroke-linecap="round"/>' +
+      '<circle cx="-15" cy="-46" r="5" fill="#b88060"/><circle cx="12" cy="-46" r="5" fill="#b88060"/>' +
+      '<ellipse cy="-18" rx="26" ry="21" fill="' + coat + '"/><ellipse cy="-6" rx="19" ry="10" fill="#ffe0b1"/>' +
+      '<path d="M-11-20v2m23-2v2m-16 12q4 5 8 0" fill="none" stroke-width="2.7" stroke-linecap="round"/>' +
+      '<path d="M-13 15q16 6 25-4l4 7q-11 12-30 5Z" fill="' + scarf + '"/>' +
+      '<g fill="' + accent + '" stroke="none"><ellipse cx="-17" cy="-11" rx="5" ry="3"/><ellipse cx="17" cy="-11" rx="5" ry="3"/></g></g>';
+  }
   const ears = {
     'moss rabbit': '<path d="M-21-15Q-42-60-26-65Q-10-69-5-28M6-28Q11-70 27-65Q43-59 22-15"/><path d="M-23-25q-18-30-9-34q10-4 18 31m30 0q9-35 18-30q8 4-9 32" fill="' + accent + '" stroke="none"/>',
     'orchard cat': '<path d="M-35-5-42-42-8-24M35-5 42-42 8-24"/><path d="m-33-16-3-15 15 10m54 5 3-15-15 10" fill="' + accent + '" stroke="none"/>',

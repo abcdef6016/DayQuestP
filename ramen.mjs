@@ -1,3 +1,4 @@
+import { gameSound } from './dayquest-audio.mjs';
 import { shelfObject, counterProps } from './ingredient-shelf.mjs';
 import { freshCurry, curryPlateArt, sauces, curryToppings } from './curry.mjs';
 import { freshPizza, freshIce, pizzaToppings, iceToppings, flavors } from './village-recipes.mjs';
@@ -134,6 +135,7 @@ function perform(action, value) {
       return;
     }
     find('status').textContent = '';
+    if (action !== 'stir') gameSound(action === 'serve' ? 'serve' : 'add');
     animateAction(action === 'pour-broth' ? 'pour' : action, action === 'place' ? record.dish.placements.at(-1) : value);
   });
 }

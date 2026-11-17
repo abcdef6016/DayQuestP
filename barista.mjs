@@ -1,3 +1,4 @@
+import { gameSound } from './dayquest-audio.mjs';
 import { customers, freshOrders, startRush, advanceRush, stopRush, scoreOrder, rushSeconds, customerSeconds } from './barista-orders.mjs';
 import { shelfObject, counterProps } from './ingredient-shelf.mjs';
 import { drinks } from './barista-recipes.mjs';
@@ -16,10 +17,11 @@ root.innerHTML = `
       <button type="button" id="barista-saved-button">Saved drinks</button>
     </nav>
   </header>
-  <details id="barista-game">
-    <summary>60-second cafe rush</summary>
+  <details id="barista-game" open>
+    <summary>Quick game · Café Rush</summary>
     <div class="barista-game-controls">
-      <button type="button" id="barista-game-start">Start cafe rush</button>
+      <button type="button" id="barista-quick-start">Start 30-second rush</button>
+      <button type="button" id="barista-game-start">Start 60-second rush</button>
       <button type="button" id="barista-game-stop" hidden>End rush</button>
     </div>
     <p id="barista-game-score"></p>
@@ -146,7 +148,7 @@ function write(change, after) {
   return queue;
 }
 
-function start(id, timed = false) {
+function start(id, duration = 0) {
   if (!record) return;
   const { dish } = record;
   const saved = record.recipes.some(recipe => JSON.stringify(recipe.dish) === JSON.stringify(dish) && recipe.name === record.name);
@@ -155,12 +157,13 @@ function start(id, timed = false) {
     : dish.added.length && !saved && !window.confirm('Replace the current drink?')) return;
   write(previous => {
     const existing = previous.game ?? freshOrders();
-    const game = timed ? startRush(existing) : { ...existing, order: null, rush: undefined };
+    const game = duration ? startRush(existing, Date.now(), Math.random, duration) : { ...existing, order: null, rush: undefined };
     return { ...previous, dish: baristaAction(previous.dish,'choose',game.order?.recipeId ?? id),
       name:'', history:[], game };
   }, () => {
     get('status').textContent = '';
     viewPage('counter');
+    if (duration) gameSound('start');
   });
 }
 
@@ -179,6 +182,7 @@ function act(action, value) {
     return { ...previous, dish, ...(game ? { game } : {}), history: [...previous.history, previous.dish].slice(-40) };
   }, () => {
     if (!applied) return;
+    if (action === 'add' || action === 'serve') gameSound(action);
     get('status').textContent = '';
     const effect = get('scene').querySelector('.barista-effect');
     if (action === 'add') effect.innerHTML = '<g transform="translate(240 ' + drinkSurface(record.dish) + ')">' + additionArt(value) + '</g>';
@@ -257,7 +261,7 @@ function renderOrders() {
   const clock = get('game-clock');
   const session = get('rush-clock');
   const customer = get('game-customer');
-  get('game-start').disabled = !record || Boolean(active);
+  get('quick-start').disabled = get('game-start').disabled = !record || Boolean(active);
   get('game-stop').hidden = !active;
   const score = 'Barista points ' + game.points + ' | Lifetime on-time orders ' + game.served;
   if (get('game-score').textContent !== score) get('game-score').textContent = score;
@@ -269,7 +273,7 @@ function renderOrders() {
   if (customer.textContent !== label) customer.textContent = label;
   const showSeconds = deadline => Math.max(0, Math.ceil((deadline - now)/1000));
   if (active) {
-    const sessionText = 'Cafe rush: ' + showSeconds(rush.deadline) + ' / ' + rushSeconds + 's';
+    const sessionText = 'Cafe rush: ' + showSeconds(rush.deadline) + ' / ' + (rush.duration ?? rushSeconds) + 's';
     const customerText = customers[order.customer].name + ': ' + showSeconds(order.deadline) + ' / ' + customerSeconds + 's';
     if (session.textContent !== sessionText) session.textContent = sessionText;
     if (clock.textContent !== customerText) clock.textContent = customerText;
@@ -297,7 +301,8 @@ function tickRush() {
   })?.finally(() => { advancing = false; });
 }
 
-get('game-start').addEventListener('click', () => start(null, true));
+get('quick-start').addEventListener('click', () => start(null, 30));
+get('game-start').addEventListener('click', () => start(null, 60));
 get('game-stop').addEventListener('click', () => write(previous => ({ ...previous, game: stopRush(previous.game) })));
 
 function showSaved(id) {

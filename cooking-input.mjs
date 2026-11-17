@@ -1,6 +1,6 @@
 // Provide native button activation for keyboard and assistive technology, plus
 // captured drag and tap activation for touch WebViews.
-export function bindCookingButtons(root, { move, drop, clear, isBusy = () => false }) {
+export function bindCookingButtons(root, { move, drop, clear, accept = () => true, isBusy = () => false }) {
   let gesture;
   let handledTouch = false;
   let ghost;
@@ -18,7 +18,7 @@ export function bindCookingButtons(root, { move, drop, clear, isBusy = () => fal
 
   root.addEventListener('pointerdown', event => {
     const button = event.target.closest('button');
-    if (!button || button.disabled || event.button !== 0 || gesture || isBusy()) return;
+    if (!button || !accept(button) || button.disabled || event.button !== 0 || gesture || isBusy()) return;
     handled.delete(button);
     handledTouch = false;
     const { target } = button.dataset;

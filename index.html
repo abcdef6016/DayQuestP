@@ -23,7 +23,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <link rel="apple-touch-icon" href="icon-192.png" />
   <link rel="icon" type="image/png" href="icon-192.png" />
-  
+
   <link rel="stylesheet" href="vendor/tailwind.css" />
   <link rel="stylesheet" href="dayquest-theme.css" />
   <script src="vendor/confetti.js"></script>
@@ -41,8 +41,8 @@
       font-weight: 500 800;
       font-display: swap;
     }
-    
-    body { 
+
+    body {
       font-family: 'Plus Jakarta Sans', sans-serif;
       background-color: #0b0f19;
       background-image: radial-gradient(rgba(16, 185, 129, 0.12) 1.5px, transparent 1.5px);
@@ -187,7 +187,7 @@
 
   <!-- MAIN CONTENT AREA -->
   <main id="dayquest-main" class="flex-1 overflow-y-auto pb-28 md:pb-10 p-4 md:p-8 custom-scrollbar">
-    
+
     <!-- TOP MOBILE HEADER -->
     <header class="dayquest-mobile-header flex md:hidden items-center justify-between mb-5 bg-slate-900/90 border-2 border-slate-800 rounded-2xl px-4 py-2.5 shadow-lg">
       <div class="flex items-center gap-2.5">
@@ -228,7 +228,7 @@
     <section id="tab-barista" class="tab-content hidden" aria-label="Barista"></section>
     <section id="tab-notebook" class="tab-content hidden" aria-label="Personal notebook"></section>
     <section id="tab-home" class="tab-content space-y-6 max-w-3xl mx-auto animate-pop">
-      
+
       <section class="cottage-start" aria-labelledby="cottage-home-title">
         <h2 id="cottage-home-title">Morning Cottage</h2>
         <div class="cottage-start-actions">
@@ -298,7 +298,7 @@
       <div class="bg-slate-900/90 border-2 border-slate-800 rounded-3xl p-5 md:p-6 shadow-xl">
         <h2 class="font-playful text-xl font-bold text-slate-100 mb-1">Check Your Mana Bar 🔋</h2>
         <p class="text-xs text-slate-400 font-medium mb-4">Pick your current vibe—no judgment, just matching quests to your brain battery.</p>
-        
+
         <div class="grid grid-cols-3 gap-3 mb-5">
           <button onclick="setEnergy('low')" id="btn-energy-low" class="energy-btn btn-juicy py-3.5 px-3 rounded-2xl border-2 border-slate-800 bg-slate-950/80 hover:border-amber-500/50 text-center transition-all">
             <span class="text-2xl block mb-1">🦥</span>
@@ -345,7 +345,7 @@
     <section id="tab-focus" class="tab-content hidden space-y-6 max-w-2xl mx-auto animate-pop">
       <div class="bg-slate-900/95 border-2 border-slate-800 rounded-3xl p-6 md:p-8 text-center shadow-2xl relative overflow-hidden">
         <div class="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-emerald-400 via-amber-400 to-purple-500"></div>
-        
+
         <div class="flex flex-wrap items-center justify-between gap-2 mb-6">
           <span id="focus-task-name" class="text-xs bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 px-3.5 py-1.5 rounded-full font-bold">✨ Free-Flow Session</span>
           <button onclick="openResistanceResolver()" class="btn-juicy text-xs text-amber-300 bg-amber-500/15 hover:bg-amber-500/25 border-2 border-amber-500/30 px-3.5 py-1.5 rounded-full font-bold transition-all flex items-center gap-1.5">
@@ -367,6 +367,11 @@
               <span class="text-xl block mb-0.5">🔥</span> 15 Min Raid
             </button>
           </div>
+          <form id="custom-focus" class="focus-extra">
+            <label for="custom-focus-minutes">Custom minutes</label>
+            <input id="custom-focus-minutes" type="number" min="1" max="180" value="25" required>
+            <button type="submit">Start custom timer</button>
+          </form>
         </div>
 
         <!-- Active Countdown / Flow Display -->
@@ -389,9 +394,18 @@
             <span class="text-base">🎧</span>
             <span class="text-xs font-extrabold text-slate-200">Cozy Sound Shield:</span>
           </div>
-          <div class="flex gap-2">
-            <button onclick="toggleAudio('brown')" id="audio-brown" class="btn-juicy px-3.5 py-2 rounded-xl text-xs font-bold bg-slate-950 border-2 border-slate-800 text-slate-300 hover:border-emerald-500/40 transition-all">🌊 Brown Noise</button>
-            <button onclick="toggleAudio('rain')" id="audio-rain" class="btn-juicy px-3.5 py-2 rounded-xl text-xs font-bold bg-slate-950 border-2 border-slate-800 text-slate-300 hover:border-cyan-500/40 transition-all">🌧️ Soft Rain</button>
+          <div class="focus-extra">
+            <label for="focus-sound">Focus audio</label>
+            <select id="focus-sound">
+              <option value="">Off</option><option value="music">Cozy game music</option>
+              <option value="rain">Soft rain</option><option value="heavyRain">Hard rain</option>
+              <option value="white">White noise</option><option value="hardNoise">Hard noise</option>
+              <option value="brown">Brown noise</option><option value="cafe">Café ambience</option>
+              <option value="storm">Thunderstorm</option>
+            </select>
+            <label for="focus-volume">Volume</label>
+            <input id="focus-volume" type="range" min="0" max="100" value="45">
+            <p id="focus-sound-status" role="status"></p>
           </div>
         </div>
       </div>
@@ -494,7 +508,7 @@
       <div class="bg-slate-900/90 border-2 border-slate-800 rounded-3xl p-6 md:p-8 shadow-xl">
         <h2 class="font-playful text-2xl font-bold text-slate-100 mb-1">🤖 SparkBot Customization Lab</h2>
         <p class="text-xs text-slate-400 font-medium mb-6">Tap SparkBot to test its boosters or customize its visor color!</p>
-        
+
         <!-- Interactive SparkBot Display -->
         <div onclick="petSparkBot()" class="w-52 h-52 mx-auto bg-slate-950 rounded-3xl border-2 border-emerald-500/30 flex items-center justify-center shadow-[0_0_35px_rgba(16,185,129,0.15)] mb-6 relative cursor-pointer hover:scale-105 transition-transform animate-float">
           <svg id="sparkbot-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" class="w-40 h-40" width="160" height="160">
@@ -568,6 +582,26 @@
         </label>
         <label><input type="checkbox" id="setting-sound"> Sound effects</label>
         <label><input type="checkbox" id="setting-visits"> Allow Cottage surprise visits</label>
+        <section class="cottage-reminders" aria-labelledby="cottage-reminder-title">
+          <h4 id="cottage-reminder-title">Daily Cottage notification</h4>
+          <form id="cottage-reminder-form">
+            <label for="cottage-reminder-time">Reminder time</label>
+            <input id="cottage-reminder-time" type="time" value="09:00" required>
+            <button type="submit">Schedule daily</button>
+            <button type="button" id="cottage-reminder-disable">Turn off</button>
+          </form>
+          <p id="cottage-reminder-status" role="status"></p>
+        </section>
+        <section class="cottage-reminders" aria-labelledby="quick-reminder-title">
+          <h4 id="quick-reminder-title">Daily quick game notification</h4>
+          <form id="quick-reminder-form">
+            <label for="quick-reminder-time">Reminder time</label>
+            <input id="quick-reminder-time" type="time" value="17:00" required>
+            <button type="submit">Schedule daily</button>
+            <button type="button">Turn off</button>
+          </form>
+          <p id="quick-reminder-status" role="status"></p>
+        </section>
       </section>
     </section>
 
@@ -916,6 +950,11 @@
       focusActive: () => !document.getElementById('timer-active-view').classList.contains('hidden'),
       notes: notebookNotes,
       soundEnabled: () => state.sfxEnabled,
+      villagePoints: () => Number.isSafeInteger(state.villagePoints) && state.villagePoints >= 0 ? state.villagePoints : 0,
+      addVillagePoints(points) {
+        state.villagePoints = window.dayQuestHome.villagePoints() + points;
+        persistState();
+      },
       setSound: setSoundEffects,
       productivitySnapshot: () => structuredClone(state),
       async restoreProductivity(incoming) {
@@ -1028,7 +1067,7 @@
 
       const filtered = state.quests.filter(q => !q.done && q.tier === state.activeEnergy);
       const box = document.getElementById('recommended-task-box');
-      
+
       if (filtered.length === 0) {
         box.innerHTML = `<p class="text-slate-400 text-xs italic">✨ All clear in this energy tier! Pick another mana bar or toss a new quest above.</p>`;
       } else {
@@ -1221,7 +1260,7 @@
     function renderQuests() {
       const container = document.getElementById('quest-list-container');
       const filtered = state.quests.filter(q => q.space === state.activeSpace);
-      
+
       if (filtered.length === 0) {
         container.innerHTML = `<div class="text-center py-10 bg-slate-900/60 border-2 border-dashed border-slate-800 rounded-3xl text-slate-400 text-xs font-medium">✨ No quests posted in ${escapeText(workspaceName(state.activeSpace))} yet!</div>`;
         return;
@@ -1277,35 +1316,45 @@
     }
 
     // Focus Timer
+    let countdownEnd = 0;
+    let pausedAt = 0;
     function startFocusTimer(mins) {
+      if (!Number.isInteger(mins) || mins < 1 || mins > 180) return;
       playSFX('pop');
-      state.timerSeconds = mins * 60;
-      state.timerRunning = true;
+      countdownEnd = Date.now() + mins * 60000;
       state.timerMode = 'initiation';
+      state.timerRunning = true;
+      pausedAt = 0;
       document.getElementById('timer-setup-view').classList.add('hidden');
       document.getElementById('timer-active-view').classList.remove('hidden');
       document.dispatchEvent(new Event('dayquest:focus'));
-      document.getElementById('timer-mode-label').innerText = '⚡ Spark Ignition';
+      document.getElementById('pause-timer-btn').textContent = 'Pause';
+      document.getElementById('timer-mode-label').textContent = 'Spark Ignition';
+      document.getElementById('timer-display').classList.replace('text-amber-300', 'text-emerald-300');
+      startTimerTicks();
+    }
+
+    document.getElementById('custom-focus').addEventListener('submit', event => {
+      event.preventDefault();
+      startFocusTimer(document.getElementById('custom-focus-minutes').valueAsNumber);
+    });
+
+    function startTimerTicks() {
+      clearInterval(state.timerInterval);
+      tickFocusTimer();
+      state.timerInterval = setInterval(tickFocusTimer, 250);
+    }
+
+    function tickFocusTimer() {
+      const remaining = countdownEnd - Date.now();
+      if (remaining <= 0 && state.timerMode === 'initiation') {
+        state.timerMode = 'flow';
+        playSFX('coin');
+        document.getElementById('timer-mode-label').textContent = 'Hyper-Flow Bonus!';
+        document.getElementById('timer-display').classList.replace('text-emerald-300', 'text-amber-300');
+      }
+      state.timerSeconds = remaining > 0 ? Math.ceil(remaining / 1000) : Math.floor(-remaining / 1000);
       updateTimerDisplay();
-      
-      if (state.timerInterval) clearInterval(state.timerInterval);
-      state.timerInterval = setInterval(() => {
-        if (state.timerSeconds > 0) {
-          state.timerSeconds--;
-          updateTimerDisplay();
-        } else {
-          if (state.timerMode === 'initiation') {
-            state.timerMode = 'flow';
-            state.timerSeconds = 0;
-            playSFX('coin');
-            document.getElementById('timer-mode-label').innerText = '🔥 Hyper-Flow Bonus!';
-            document.getElementById('timer-display').classList.replace('text-emerald-300', 'text-amber-300');
-          } else {
-            state.timerSeconds++;
-            updateTimerDisplay();
-          }
-        }
-      }, 1000);
     }
 
     function updateTimerDisplay() {
@@ -1318,11 +1367,12 @@
       state.timerRunning = !state.timerRunning;
       if (!state.timerRunning) {
         clearInterval(state.timerInterval);
-        document.getElementById('pause-timer-btn').innerText = '▶️ Resume';
+        pausedAt = Date.now();
       } else {
-        startFocusTimer(Math.max(1, Math.ceil(state.timerSeconds / 60)));
-        document.getElementById('pause-timer-btn').innerText = '⏸️ Pause';
+        countdownEnd += Date.now() - pausedAt;
+        startTimerTicks();
       }
+      document.getElementById('pause-timer-btn').textContent = state.timerRunning ? 'Pause' : 'Resume';
     }
 
     function stopFocusTimer() {
@@ -1342,38 +1392,6 @@
       document.getElementById('timer-active-view').classList.add('hidden');
       document.getElementById('timer-setup-view').classList.remove('hidden');
       switchTab('home');
-    }
-
-    // Cozy Sound Shield
-    let audioCtx = null;
-    let audioNode = null;
-    let currentSound = null;
-    function toggleAudio(type) {
-      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      if (audioNode) {
-        audioNode.stop();
-        audioNode = null;
-        document.querySelectorAll('[id^="audio-"]').forEach(b => b.className = 'btn-juicy px-3.5 py-2 rounded-xl text-xs font-bold bg-slate-950 border-2 border-slate-800 text-slate-300 transition-all');
-        if (currentSound === type) { currentSound = null; return; }
-      }
-      currentSound = type;
-      const bufferSize = audioCtx.sampleRate * 2;
-      const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-      const data = buffer.getChannelData(0);
-      let lastOut = 0.0;
-      for (let i = 0; i < bufferSize; i++) {
-        const white = Math.random() * 2 - 1;
-        data[i] = type === 'brown' ? (lastOut + (0.02 * white)) / 1.02 : (lastOut + (0.08 * white)) / 1.08;
-        lastOut = data[i];
-        data[i] *= type === 'brown' ? 3.2 : 1.5;
-      }
-      audioNode = audioCtx.createBufferSource();
-      audioNode.buffer = buffer;
-      audioNode.loop = true;
-      audioNode.connect(audioCtx.destination);
-      audioNode.start();
-
-      document.getElementById(`audio-${type}`).className = 'btn-juicy px-3.5 py-2 rounded-xl text-xs font-extrabold bg-emerald-500/20 border-2 border-emerald-400 text-emerald-300 transition-all';
     }
 
     // Distraction Parking Lot

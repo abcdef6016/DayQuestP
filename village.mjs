@@ -1,3 +1,6 @@
+import { mountVillageRush } from './village-rush.mjs';
+import { showOnlineRecipe } from './daily-online.mjs';
+import { gameSound } from './dayquest-audio.mjs';
 import { pourArt } from './barista-art.mjs';
 import { shelfObject, counterProps } from './ingredient-shelf.mjs';
 import { sauces, curryToppings, curryStirs, curryPan, curryPlate, freshCurry, curryAction } from './curry.mjs';
@@ -78,13 +81,20 @@ let bakeTimer;
 let effectTimer;
 
 let dailySpecial;
+const onlineRecipe = document.createElement('p');
+onlineRecipe.className = 'daily-online-recipe';
+onlineRecipe.hidden = true;
+market.querySelector('#daily-menu-card').after(onlineRecipe);
+mountVillageRush(market, () => dailySpecial?.revealed ? dailySpecial.food.kind : null);
 const revealButton = market.querySelector('#daily-menu-reveal');
 const specialCard = market.querySelector('#daily-menu-card');
 const marketTeaser = market.querySelector('#daily-menu-teaser');
 
-export function setDailySpecial(food, revealed, reveal) {
-  if (dailySpecial?.food === food && dailySpecial.revealed === revealed) return;
-  dailySpecial = { food, revealed, reveal };
+export function setDailySpecial(food, revealed, reveal, day) {
+  if (dailySpecial?.food === food && dailySpecial.revealed === revealed && dailySpecial.day === day) return;
+  dailySpecial = { food, revealed, reveal, day };
+  onlineRecipe.hidden = !revealed;
+  if (revealed) showOnlineRecipe(onlineRecipe, day, food.kind);
   revealButton.hidden = revealed;
   specialCard.hidden = !revealed;
   marketTeaser.textContent = revealed ? 'Today’s kitchen is open.' : 'One kitchen opens each day. Unseal the menu to see what’s cooking.';
@@ -150,7 +160,7 @@ for (const menu of [nav, market]) {
     const button = event.target.closest('button[data-shop]');
     if (button) select(button.dataset.shop);
   });
-  bindCookingButtons(menu, {});
+  bindCookingButtons(menu, { accept: button => !button.closest('.dayquest-quick-panel') });
 }
 
 root.addEventListener('dayquest:scrapbook', event => {
@@ -186,6 +196,7 @@ function perform(action, value) {
   }, () => {
     if (!changed || active !== kind) return;
     find('status').textContent = '';
+    gameSound(action === 'serve' ? 'serve' : 'add');
     animate(action, value);
   });
 }

@@ -1,3 +1,4 @@
+import './cottage-notifications.mjs';
 import { bindCookingButtons } from './cooking-input.mjs';
 import './barista.mjs';
 import './notebook.mjs';
