@@ -21,6 +21,11 @@ for (const asset of assets) {
   await copyFile(resolve(project,asset),target);
 }
 await cp(resolve(project,'vendor'),resolve(directory,'vendor'),{ recursive: true });
-await cp(resolve(project,'.well-known'),resolve(directory,'.well-known'),{ recursive: true });
+const metadata = await lstat(resolve(project,'.well-known')).catch(error => {
+  if (error.code !== 'ENOENT') throw error;
+});
+if (metadata?.isDirectory()) {
+  await cp(resolve(project,'.well-known'),resolve(directory,'.well-known'),{ recursive: true });
+}
 const packaged = await verifyWebAssets(directory);
 console.log('Packaged and verified ' + packaged.size + ' DayQuest assets in ' + config.webDir);
