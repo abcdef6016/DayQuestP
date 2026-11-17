@@ -1,3 +1,4 @@
+import { validPaper } from './notebook-paper.mjs';
 import { validOrders } from './barista-orders.mjs';
 import { freshBarista, validBaristaDish } from './barista-model.mjs';
 import { freshCurry, sauces, curryStirs } from './curry.mjs';
@@ -71,6 +72,9 @@ function validateKitchen(kind, record) {
 
 const validators = {
   coins: data => int(data, 0),
+  villagePoints: data => int(data, 0),
+  cookingExchange: data => object(data) && validDay(data.day) &&
+    int(data.village, 0) && int(data.barista, 0) && int(data.count, 0, 2),
   xp: data => int(data, 0),
   level: data => int(data, 1),
   botColor: data => text(data) && /^#[0-9a-f]{6}$/i.test(data),
@@ -89,7 +93,12 @@ const validators = {
   parkingLot: data => Array.isArray(data) && data.every(item => object(item) && int(item.id, 0) && text(item.text)),
   rewards: data => Array.isArray(data) && data.every(item => object(item) && int(item.id, 0) && int(item.cost, 1) && text(item.title)),
   notebookNotes: data => Array.isArray(data) && data.every(item => object(item) && [item.id,item.title,item.body].every(text) &&
-    int(item.created, 0, 8640000000000000) && int(item.updated, 0, 8640000000000000))
+    int(item.created, 0, 8640000000000000) && int(item.updated, 0, 8640000000000000) &&
+    (!Object.hasOwn(item, 'folder') || ['active','archived','trash'].includes(item.folder)) &&
+    (!Object.hasOwn(item, 'pinned') || typeof item.pinned === 'boolean') &&
+    (!Object.hasOwn(item, 'page') || validPaper(item.page)) &&
+    (!Object.hasOwn(item, 'formatted') || typeof item.formatted === 'boolean') &&
+    (!Object.hasOwn(item, 'tags') || (Array.isArray(item.tags) && item.tags.every(text))))
 };
 
 function productivityData(source) {

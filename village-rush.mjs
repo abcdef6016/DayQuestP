@@ -1,3 +1,4 @@
+import { availablePoints } from './coin-exchange.mjs';
 import { bindCookingButtons } from './cooking-input.mjs';
 import { gameSound } from './dayquest-audio.mjs';
 
@@ -23,9 +24,17 @@ export function mountVillageRush(market, currentKitchen) {
       <button type="button" data-clear>Clear plate</button>
       <button type="button" data-serve disabled>Serve plate</button>
     </div>
-    <p data-result role="status"></p>`;
+    <p data-result role="status"></p>
+    <p data-balance></p><button type="button" data-exchange>Exchange points</button>`;
   market.append(panel);
   const get = key => panel.querySelector('[data-' + key + ']');
+  const updateBalance = () => {
+    const home = window.dayQuestHome;
+    get('balance').textContent = availablePoints(home.villagePoints(), home.exchangeLedger(), 'village') + ' Village points available';
+  };
+  window.dayQuestHome.ready.then(updateBalance);
+  document.addEventListener('dayquest:state', updateBalance);
+  get('exchange').onclick = () => window.dayQuestHome.navigate('rewards');
   const ingredients = get('shelf');
   const plate = get('plate');
   let deadline = 0;

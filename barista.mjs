@@ -1,3 +1,4 @@
+import { availablePoints } from './coin-exchange.mjs';
 import { gameSound } from './dayquest-audio.mjs';
 import { customers, freshOrders, startRush, advanceRush, stopRush, scoreOrder, rushSeconds, customerSeconds } from './barista-orders.mjs';
 import { shelfObject, counterProps } from './ingredient-shelf.mjs';
@@ -25,6 +26,7 @@ root.innerHTML = `
       <button type="button" id="barista-game-stop" hidden>End rush</button>
     </div>
     <p id="barista-game-score"></p>
+    <button type="button" id="barista-exchange">Exchange points</button>
     <div class="barista-rush-timers">
       <p id="barista-rush-clock" role="timer" aria-live="off" hidden></p>
       <p id="barista-game-clock" role="timer" aria-live="off" hidden></p>
@@ -140,6 +142,7 @@ function write(change, after) {
   if (!db || !record) return;
   queue = queue.then(async () => {
     record = await cookingRecord(db, change, 'barista', freshBarista);
+    document.dispatchEvent(new Event('dayquest:barista-points'));
     counter();
     renderOrders();
     get('counter-button').hidden = !record.dish.recipeId;
@@ -253,6 +256,8 @@ function counter() {
     (get('tray').querySelector('button:not(:disabled)') ?? (phase === 'mix' ? mix : phase === 'serve' ? get('serve') : get('undo'))).focus();
 }
 
+export function baristaPoints() { return record ? (record.game?.points ?? 0) : null; }
+
 function renderOrders() {
   const game = record?.game ?? freshOrders();
   const { order, rush } = game;
@@ -263,7 +268,7 @@ function renderOrders() {
   const customer = get('game-customer');
   get('quick-start').disabled = get('game-start').disabled = !record || Boolean(active);
   get('game-stop').hidden = !active;
-  const score = 'Barista points ' + game.points + ' | Lifetime on-time orders ' + game.served;
+  const score = 'Barista points ' + availablePoints(game.points, window.dayQuestHome.exchangeLedger(), 'barista') + ' | Lifetime on-time orders ' + game.served;
   if (get('game-score').textContent !== score) get('game-score').textContent = score;
   session.hidden = !active;
   clock.hidden = !active || !order || Boolean(order.result);
@@ -303,6 +308,7 @@ function tickRush() {
 
 get('quick-start').addEventListener('click', () => start(null, 30));
 get('game-start').addEventListener('click', () => start(null, 60));
+get('exchange').addEventListener('click', () => window.dayQuestHome.navigate('rewards'));
 get('game-stop').addEventListener('click', () => write(previous => ({ ...previous, game: stopRush(previous.game) })));
 
 function showSaved(id) {
@@ -442,6 +448,7 @@ async function load() {
   try {
     db ||= await openCookingStore();
     record = await cookingRecord(db, undefined, 'barista', freshBarista);
+    document.dispatchEvent(new Event('dayquest:barista-points'));
     menu();
     counter();
     renderOrders();
@@ -458,4 +465,5 @@ viewPage('menu');
 menu();
 renderOrders();
 load();
+document.addEventListener('dayquest:state', renderOrders);
 document.addEventListener('dayquest:kitchens', () => queue.then(load));

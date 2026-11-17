@@ -484,6 +484,16 @@
         </div>
       </div>
 
+      <section class="integration-card" id="cooking-exchange" aria-labelledby="cooking-exchange-title">
+        <h3 id="cooking-exchange-title">Cooking Point Exchange</h3>
+        <p data-exchange-rate></p>
+        <p data-exchange-left></p>
+        <div class="integration-actions">
+          <button type="button" data-exchange="village" disabled>Trade Village points<span></span></button>
+          <button type="button" data-exchange="barista" disabled>Trade Barista points<span></span></button>
+        </div>
+        <p role="status"></p>
+      </section>
       <div class="flex justify-between items-center">
         <h3 class="font-playful text-base font-bold text-slate-200">Available Rewards</h3>
         <button onclick="openAddRewardModal()" class="btn-juicy shadow-juicy-amber bg-amber-400 hover:bg-amber-300 text-slate-950 px-4 py-2 rounded-2xl text-xs font-extrabold transition-all">
@@ -943,6 +953,7 @@
       }
     }
 
+    let exchangePending = false;
     const notebookNotes = () => Array.isArray(state.notebookNotes) ? state.notebookNotes : [];
     window.dayQuestHome = {
       ready: stateReady,
@@ -955,10 +966,36 @@
         state.villagePoints = window.dayQuestHome.villagePoints() + points;
         persistState();
       },
+      exchangeLedger: () => state.cookingExchange,
+      async exchangePoints(source, earned) {
+        await stateReady;
+        if (exchangePending || rewardPending) return 'unavailable';
+        const previous = state.cookingExchange;
+        const exchange = window.dayQuestRelease.exchange;
+        const next = exchange.tradePoints(previous, source, source === 'village' ? window.dayQuestHome.villagePoints() : earned);
+        if (!next) return 'unavailable';
+        exchangePending = true;
+        state.cookingExchange = next;
+        state.coins += exchange.coinsPerExchange;
+        try {
+          if (await persistState()) {
+            playSFX('coin');
+            return 'saved';
+          }
+          state.cookingExchange = previous;
+          state.coins -= exchange.coinsPerExchange;
+          saveLocalState();
+          renderAll();
+          return 'failed';
+        } finally {
+          exchangePending = false;
+        }
+      },
       setSound: setSoundEffects,
       productivitySnapshot: () => structuredClone(state),
       async restoreProductivity(incoming) {
         await stateReady;
+        if (exchangePending) return false;
         const previous = state;
         const notes = new Map(notebookNotes().map(note => [note.id, note]));
         for (const note of incoming.notebookNotes ?? []) {
@@ -966,6 +1003,10 @@
           if (!existing || existing.updated < note.updated) notes.set(note.id, note);
         }
         const restored = { ...state, ...incoming, notebookNotes: [...notes.values()] };
+        restored.villagePoints = Math.max(window.dayQuestHome.villagePoints(), incoming.villagePoints ?? 0);
+        if (state.cookingExchange || incoming.cookingExchange) {
+          restored.cookingExchange = window.dayQuestRelease.exchange.mergeExchange(state.cookingExchange, incoming.cookingExchange);
+        }
         state = restored;
         const saved = await persistState();
         if (!saved && state === restored) {
@@ -1454,7 +1495,7 @@
     }
 
     async function redeemReward(id) {
-      if (rewardPending) return;
+      if (rewardPending || exchangePending) return;
       const reward = state.rewards.find(item => item.id === id);
       if (!reward || !Number.isSafeInteger(reward.cost) || reward.cost <= 0) return;
       if (state.coins < reward.cost) {

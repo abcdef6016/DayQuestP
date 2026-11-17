@@ -1,4 +1,4 @@
-const CACHE_NAME = 'dayquest-v2-quick-rush-13';
+const CACHE_NAME = 'dayquest-v2-paper-notebook-15';
 const ASSETS = [
   './', './index.html', './manifest.json', './icon.png', './icon-192.png', './icon-maskable.png',
   './ramen.css', './cottage.css', './dayquest-theme.css', './vendor/dayquest.js',

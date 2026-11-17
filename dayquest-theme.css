@@ -596,3 +596,64 @@ body :where(.tab-content, [id^=modal-]) :is(.bg-slate-900\/95,.bg-slate-950\/75)
 .daily-online-recipe { margin-top: .75rem; }
 .daily-online-recipe a { text-decoration: underline; }
 .daily-online-recipe small { display: block; }
+
+#tab-notebook { max-width: 980px; }
+.notebook-list-panel { display: grid; gap: .35rem; align-content: start; min-width: 0; }
+.notebook-list-panel input, .notebook-list-panel select { padding: .55rem; border-radius: .65rem; border: 1px solid var(--line); color: var(--text); background: var(--surface); }
+.notebook-tools { display: flex; flex-wrap: wrap; gap: .3rem; }
+.notebook-tools button { min-height: 40px; }
+.notebook-frame #notebook-body { min-height: 12rem; line-height: 1.6; }
+.notebook-preview { min-height: 10rem; padding: .75rem; overflow-wrap: anywhere; border: 1px solid var(--line); border-radius: .7rem; }
+.notebook-preview p { white-space: pre-wrap; min-height: 1em; }
+.notebook-preview h3, .notebook-preview h4, .notebook-preview h5 { font-weight: 800; margin: .45rem 0; }
+.notebook-preview h3 { font-size: 1.3rem; }
+.notebook-preview ul, .notebook-preview ol { margin: .4rem 0; padding-inline-start: 1.4rem; }
+.notebook-preview ul { list-style: disc; }
+.notebook-preview ol { list-style: decimal; }
+.notebook-preview .notebook-check { list-style: none; }
+.notebook-preview .notebook-check input { display: inline-block; width: auto; margin: 0 .3rem 0 0; }
+.notebook-preview a { text-decoration: underline; }
+.notebook-preview blockquote { padding-inline-start: .65rem; border-inline-start: 3px solid var(--line); }
+.notebook-preview pre, .notebook-preview code { background: var(--surface-2); border-radius: .35rem; padding: .2rem; }
+.notebook-preview pre { white-space: pre-wrap; }
+#notebook-count { font-size: .8rem; color: var(--muted); }
+#cooking-exchange button span { display: block; font-weight: 500; }
+#cooking-exchange button:disabled { opacity: .6; cursor: default; }
+
+/* Notebook paper palettes and stationery */
+.notebook-sheet, .notebook-list-panel button[data-palette] { --paper-color: #f4edff; --paper-rule: #d6c3eb; --paper-ink: #39234e; --paper-accent: #ab7dbc; }
+#tab-notebook [data-palette=blush] { --paper-color: #fff0f3; --paper-rule: #edcbd7; --paper-ink: #49283b; --paper-accent: #c7829f; }
+#tab-notebook [data-palette=oat] { --paper-color: #fff8e8; --paper-rule: #e5d4ae; --paper-ink: #493720; --paper-accent: #b9955e; }
+#tab-notebook [data-palette=mint] { --paper-color: #edf9ef; --paper-rule: #c8e0ce; --paper-ink: #254635; --paper-accent: #83a990; }
+#tab-notebook [data-palette=night] { --paper-color: #292033; --paper-rule: #493b57; --paper-ink: #f4e9ff; --paper-accent: #ae8ac3; }
+.notebook-list-panel button[data-palette] { border-inline-start: .35rem solid var(--paper-accent); }
+.notebook-paper-settings { display: flex; flex-wrap: wrap; align-items: center; gap: .55rem .8rem; }
+.notebook-paper-settings label { display: flex; align-items: center; flex-wrap: wrap; gap: .35rem; }
+.notebook-paper-settings select { min-height: 42px; padding: .35rem .55rem; border: 1px solid var(--line); border-radius: .5rem; color: var(--text); background: var(--surface); }
+.notebook-sheet {
+  --paper-step: 1.65rem;
+  color: var(--paper-ink); background: var(--paper-color); border-radius: .9rem;
+  overflow: hidden; border: 1px solid var(--paper-rule); border-inline-start: .3rem solid var(--paper-accent);
+  box-shadow: 0 4px 12px #2a17441a;
+}
+#tab-notebook .notebook-sheet textarea, #tab-notebook .notebook-sheet .notebook-preview {
+  display: block; background-color: transparent; color: var(--paper-ink); border: 0; border-radius: 0;
+  padding: .7rem .85rem; line-height: var(--paper-step); margin: 0; min-height: 16rem;
+}
+#tab-notebook .notebook-sheet textarea { font-size: 1rem; }
+.notebook-sheet[data-paper=lined] :is(textarea,.notebook-preview) {
+  background-image: linear-gradient(to bottom, transparent calc(var(--paper-step) - 1px), var(--paper-rule) 0);
+  background-size: 100% var(--paper-step); background-position: 0 .7rem;
+}
+.notebook-sheet[data-paper=grid] :is(textarea,.notebook-preview) {
+  background-image: linear-gradient(to bottom, var(--paper-rule) 1px, transparent 1px), linear-gradient(to right, var(--paper-rule) 1px, transparent 1px);
+  background-size: var(--paper-step) var(--paper-step);
+}
+.notebook-sheet[data-paper=dot] :is(textarea,.notebook-preview) {
+  background-image: radial-gradient(var(--paper-rule) 1.3px, transparent 1.5px); background-size: 1rem 1rem;
+}
+#tab-notebook .notebook-sheet :is(pre,code) { background: var(--paper-rule); }
+#notebook-ink-pad { padding: .65rem; }
+#notebook-ink-surface { display: block; width: 100%; height: auto; touch-action: none; cursor: crosshair; margin-top: .55rem; border: 1px solid var(--paper-rule); border-radius: .55rem; }
+#notebook-ink-surface.notebook-eraser path { pointer-events: stroke; }
+#notebook-ink-status:empty { display: none; }
