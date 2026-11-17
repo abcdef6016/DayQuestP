@@ -1,66 +1,44 @@
-
-name: Build DayQuest APK
+name: Build Android APK
 
 on:
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
-  build:
+  android:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout files
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: '22'
-
-      - name: Setup Java
-        uses: actions/setup-java@v4
+          cache: npm
+      - uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '21'
-
-      - name: Prepare web application
+      - uses: android-actions/setup-android@v3
+      - run: sdkmanager "platforms;android-36" "build-tools;36.0.0"
+      - run: npm ci
+      - name: Build and verify production web assets
+        run: npm run build
+      - name: Sync the production app to Capacitor
         run: |
-          mkdir -p www
-          cp index.html www/index.html
-          for dir in assets css js images; do
-            if [ -d "$dir" ]; then
-              cp -R "$dir" www/
-            fi
-          done
-
-      - name: Setup Capacitor
-        run: |
-          npm init -y
-          npm install @capacitor/core @capacitor/android
-          npm install --save-dev @capacitor/cli
-
-          cat > capacitor.config.json <<'EOF'
-          {
-            "appId": "com.dayquest.app",
-            "appName": "DayQuest",
-            "webDir": "www"
-          }
-          EOF
-
-      - name: Generate Android project
-        run: |
-          npx cap add android
+          if [ ! -f android/gradlew ]; then npx cap add android; fi
           npx cap sync android
-
-      - name: Build APK
+          npm run verify:web -- android/app/src/main/assets/public
+      - name: Assemble debug APK
+        working-directory: android
+        run: bash ./gradlew assembleDebug
+      - name: Verify the web assets embedded in the APK
         run: |
-          cd android
-          chmod +x gradlew
-          ./gradlew assembleDebug --no-daemon
-
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
+          mkdir -p "$RUNNER_TEMP/dayquest-apk"
+          unzip -q android/app/build/outputs/apk/debug/app-debug.apk 'assets/public/*' -d "$RUNNER_TEMP/dayquest-apk"
+          npm run verify:web -- "$RUNNER_TEMP/dayquest-apk/assets/public"
+      - uses: actions/upload-artifact@v4
         with:
-          name: DayQuest-APK
+          name: DayQuest-Android-debug
           path: android/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
